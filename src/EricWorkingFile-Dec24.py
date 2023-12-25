@@ -30,7 +30,7 @@ def process_data(df):
 class MarketMakingEnvironment(gym.Env):
     #def __init__(self, bid_prices, bid_amounts, ask_prices, ask_amounts):
     def __init__(self, file_paths):
-        print("start")
+        print("testing")
         super(MarketMakingEnvironment, self).__init__()
 
         self.bid_prices = []
