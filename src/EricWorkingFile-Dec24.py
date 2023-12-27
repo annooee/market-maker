@@ -71,7 +71,6 @@ class MarketMakingEnvironment(gym.Env):
             raise Exception("All files has been processed")
     def reset(self):
         self.start_line = self.episode_num * 1000
-        self.current_step = 0
         self.position = None
         self.episode_num += 1
 
@@ -123,39 +122,22 @@ class MarketMakingEnvironment(gym.Env):
                 #dont need to process the rest of info
                 return
 
-        # Print any remaining unmatched bids or asks
-        '''
-        while heap1:
-            bid = heapq.heappop(heap1)
-            print(f"Unmatched bid: {bid[1]} at price {bid[0]}")
-
-        while heap2:
-            ask = heapq.heappop(heap2)
-            print(f"Unmatched ask: {ask[1]} at price {ask[0]}")
-        '''
-
     def get_average(self, idx):
         bid_total_value = sum([self.bid_prices[idx][i] * self.bid_amounts[idx][i] for i in range(25)])
         bid_total_amount = sum(self.bid_amounts[idx])
-
         ask_total_value = sum([self.ask_prices[idx][i] * self.ask_amounts[idx][i] for i in range(25)])
         ask_total_amount = sum(self.ask_amounts[idx])
-
         bid_avg = bid_total_value / bid_total_amount if bid_total_amount != 0 else 0
         ask_avg = ask_total_value / ask_total_amount if ask_total_amount != 0 else 0
-
         return bid_avg, ask_avg
 
     def step(self, action):
         action = action[0]
         reward = 0
-
         #find curr line
         idx = self.start_line + self.current_step
-
         #matching part
         self.matching(idx)
-
         #market making part
         bid_avg, ask_avg = self.get_average(idx)
         new_bid_avg, new_ask_avg = self.get_average(idx+10)
