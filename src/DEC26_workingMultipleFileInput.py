@@ -63,6 +63,7 @@ class MarketMakingEnvironment(gym.Env):
     def load_data(self):
         if self.current_file_index < len(self.file_paths):
             file_path = self.file_paths[self.current_file_index]
+            print("\n\nNEW FILE\n\n",file_path,"\n\n")
             df = read_csv(file_path)
             self.bid_prices, self.bid_amounts, self.ask_prices, self.ask_amounts = process_data(df)
             self.current_step = 0
@@ -74,7 +75,8 @@ class MarketMakingEnvironment(gym.Env):
         self.position = None
         self.episode_num += 1
 
-        if self.current_step >= len(self.bid_prices):
+        #if self.current_step >= len(self.bid_prices):
+        if self.current_step >= 999:
             self.load_data()
 
         return self.get_observation()
@@ -193,8 +195,10 @@ from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.noise import NormalActionNoise
 
 
-file_paths = [f"C:\\Users\\ehild\\Desktop\\dqn_backup\\datasets\\binance_book_snapshot_25_{date}_ADAUSDT.csv.gz" for date in pd.date_range(start="2023-04-14", end="2023-09-08")]
-
+file_paths = [
+    f"C:\\Users\\ehild\\Desktop\\dqn_backup\\datasets\\binance_book_snapshot_25_{date.strftime('%Y-%m-%d')}_ADAUSDT.csv.gz"
+    for date in pd.date_range(start="2023-04-14", end="2023-09-08")
+]
 ###Initialize environment ###
 env = DummyVecEnv([lambda: MarketMakingEnvironment(file_paths)])
 
