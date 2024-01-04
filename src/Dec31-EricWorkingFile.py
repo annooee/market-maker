@@ -196,7 +196,7 @@ from stable_baselines3.common.noise import NormalActionNoise
 
 #"C:\Users\eric7\OneDrive\Desktop\ML_data"
 file_paths = [
-    f"C:\\Users\\eric7\\Desktop\\ML_data\\binance_book_snapshot_25_{date.strftime('%Y-%m-%d')}_ADAUSDT.csv.gz"
+    f"C:\\ericDataFiles\\ML_data\\binance_book_snapshot_25_{date.strftime('%Y-%m-%d')}_ADAUSDT.csv.gz"
     for date in pd.date_range(start="2023-04-14", end="2023-09-08")
 ]
 ###Initialize environment ###
@@ -218,6 +218,12 @@ print("Testing started")
 obs = env.reset()
 cumulative_reward = 0
 
+
+#should train the
+
+# C:\ericDataFiles\ML_data\binance_book_snapshot_25_2023-04-30_ADAUSDT.csv.gz  on the 6000th training step
+# starts at 4-14, 10+6 ==== > 4-30... means code transition is correct for testing
+#rewards still low, need to improve step function
 for i in range(10000):
     print(f"TESTING LOOP --- {i}")
     action, _states = model.predict(obs)
