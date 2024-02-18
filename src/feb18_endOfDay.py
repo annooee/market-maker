@@ -19,6 +19,8 @@ def process_data(df):
     ask_price_data = df[asks_prices].values
     ask_amount_data = df[asks_amounts].values
 
+    n = len()
+
 
     return bid_price_data, bid_amount_data, ask_price_data, ask_amount_data
 
@@ -40,11 +42,7 @@ class MarketMakingEnvironment(gym.Env):
         self.file_paths = file_paths
         self.current_step = 0
         self.current_file_index = 0
-
-        #initlize by loading day 1 data
         self.load_data()
-
-
         self.position = None
         self.start_line = 0
         self.episode_num = 0
@@ -71,8 +69,6 @@ class MarketMakingEnvironment(gym.Env):
             df = read_csv(file_path)
             self.bid_prices, self.bid_amounts, self.ask_prices, self.ask_amounts = process_data(df)
             self.current_step = 0
-
-            #this is the next file we will be loading
             self.current_file_index += 1
         else:
             raise Exception("All files has been processed")
