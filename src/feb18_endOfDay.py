@@ -19,10 +19,10 @@ def process_data(df):
     ask_price_data = df[asks_prices].values
     ask_amount_data = df[asks_amounts].values
 
-    n = len()
+    num_entries = len(bid_price_data)
 
 
-    return bid_price_data, bid_amount_data, ask_price_data, ask_amount_data
+    return bid_price_data, bid_amount_data, ask_price_data, ask_amount_data, num_entries
 
 
 # Example usage
@@ -39,10 +39,18 @@ class MarketMakingEnvironment(gym.Env):
         self.bid_amounts = []
         self.ask_prices = []
         self.ask_amounts = []
+
+        #need to keep track of how many lines in this file
+        self.num_entries = 0
+
         self.file_paths = file_paths
         self.current_step = 0
         self.current_file_index = 0
+
+        #also updates how many num_entries for a specific file
         self.load_data()
+
+
         self.position = None
         self.start_line = 0
         self.episode_num = 0
@@ -67,7 +75,9 @@ class MarketMakingEnvironment(gym.Env):
             file_path = self.file_paths[self.current_file_index]
             print("\n\nNEW FILE\n\n",file_path,"\n\n")
             df = read_csv(file_path)
-            self.bid_prices, self.bid_amounts, self.ask_prices, self.ask_amounts = process_data(df)
+            self.bid_prices, self.bid_amounts, self.ask_prices, self.ask_amounts, self.num_entries = process_data(df)
+            print("Number of Entries in this file: ", self.num_entries)
+
             self.current_step = 0
             self.current_file_index += 1
         else:
