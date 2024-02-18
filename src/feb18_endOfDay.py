@@ -88,7 +88,7 @@ class MarketMakingEnvironment(gym.Env):
         self.episode_num += 1
 
         #if self.current_step >= len(self.bid_prices):
-        if self.current_step >= 999:
+        if self.current_step >= self.num_entries:
             self.load_data()
 
         return self.get_observation()
@@ -179,8 +179,8 @@ class MarketMakingEnvironment(gym.Env):
         self.total_reward += reward
 
         self.current_step += 1
-        episode_length = 1000
-        done = self.current_step % episode_length == 0
+        #episode_length = 1000
+        done = self.current_step % self.num_entries == 0
         ##done = self.current_step >= len(self.bid_prices) - 1
         if done:
             #handle end of day here
