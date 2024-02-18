@@ -173,8 +173,11 @@ class MarketMakingEnvironment(gym.Env):
         self.total_reward += reward
 
         self.current_step += 1
+
+        # Check if it is end of day
         episode_length = 1000
         done = self.current_step % episode_length == 0
+
         ##done = self.current_step >= len(self.bid_prices) - 1
         if done:
             #handle end of day here
@@ -186,6 +189,23 @@ class MarketMakingEnvironment(gym.Env):
             print(f"money made from matching: {self.totalMoneyMadeFromMatching}")
             print(f"currentInventory: {self.inventory}")
             print(f"current Cash: {self.cash}")
+
+            big_avg, ask_avg = self.get_average(self.start_line + self.current_step)
+
+            if self.inventory > 0:
+                # Sell off inventory
+                self.cash += self.inventory * ask_avg
+                # reward -= self.inventory * some_penalty_factor
+            elif self.inventory < 0:
+                self.cash += self.inventory * bid_avg # inventory would be negative anyway
+                # reward -= self.inventory * some_penalty_factor
+
+            #reset inventory
+            self.inventory = 0
+
+            print(f"currentInventory: {self.inventory}")
+            print(f"current Cash: {self.cash}")
+
         reward = float(reward)
         return self.get_observation(), reward, done, {}
 
